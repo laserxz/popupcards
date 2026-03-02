@@ -37,6 +37,7 @@ var maxWidth = cardW > cardH ? cardW : cardH;
 var gridStep = maxWidth / modelOption.gridNum;
 
 var oaModel = new OA.Model(modelOption);
+OA.RefImage.init(oaModel, modelOption.cardW, modelOption.cardH);
 var sceneOffset = new THREE.Vector3(oaModel.getCardW() / 2, oaModel.getCardH() / 3, 0);
 
 var viewerR = maxWidth * 2.5;
@@ -58,6 +59,8 @@ var $previewUI = $("#previewUI");
 var $download2D = $("#download2D");
 var $previewUIwrapper = $("#previewUIwrapper");
 var $fileUpload = $("#fileUpload");
+var $refImageUpload = $("#refImageUpload");
+console.log("=== $refImageUpload length:", $refImageUpload.length);
 var $loadingMask = $("#loadingMask");
 var $tip = $("#tip");
 var $tipBtn = $("#tipBtn");
@@ -309,6 +312,7 @@ window.onload = function() {
         oaModel = new OA.Model(modelOption);
         oaModel.visible = false;
         scene.add(oaModel);
+        OA.RefImage.init(oaModel, modelOption.cardW, modelOption.cardH);
         setGlobalValuableByCardSize(modelOption.cardW, modelOption.cardH);
         oaModel.setCardMode(0);
         renderPreview();
@@ -413,6 +417,8 @@ window.onload = function() {
             }
         },
         readOAFile: function(evt){
+            console.log("=== readOAFile CALLED, target id:", evt.target.id, "target:", evt.target);
+            console.trace("=== readOAFile stack");
             var f = evt.target.files[0];
             if (f) {
                 var r = new FileReader();
@@ -466,6 +472,8 @@ window.onload = function() {
             createGUI();
         },
         loadModel: function() {
+            console.log("=== loadModel CALLED");
+            console.trace("=== loadModel stack");
             //will trigger readOAFile handle
             $fileUpload.click();
         },
@@ -557,6 +565,16 @@ window.onload = function() {
         },
         alignXCenter: function(){
             oaModel.contourAlignXCenter();
+        },
+        // Reference image controls
+        refImageLoad: function() {
+            console.log("=== refImageLoad CALLED, $refImageUpload length:", $refImageUpload.length);
+            $refImageUpload.click();
+        },
+        refImageShow: true,
+        refImageOpacity: 0.4,
+        refImageClear: function() {
+            OA.RefImage.clear();
         }
     };
 
@@ -627,7 +645,26 @@ window.onload = function() {
             oaControl.xLimitChange);
         f2.open();
 
+        // Reference Image folder
+        var f3 = gui.addFolder('Reference Image');
+        f3.add(oaControl, 'refImageLoad').name('<i class="fa fa-picture-o"></i> Load Image');
+        f3.add(oaControl, 'refImageShow').name('<i class="fa fa-eye"></i> Show').listen()
+            .onChange(function(val) { OA.RefImage.setVisible(val); });
+        f3.add(oaControl, 'refImageOpacity', 0.05, 1.0).step(0.05).name('Opacity')
+            .onChange(function(val) { OA.RefImage.setOpacity(val); });
+        f3.add(oaControl, 'refImageClear').name('<i class="fa fa-times"></i> Clear');
+
+        console.log("=== Binding change handlers. $fileUpload length:", $fileUpload.length, "$refImageUpload length:", $refImageUpload.length);
         $fileUpload.unbind("change").bind("change", oaControl.readOAFile);
+        $refImageUpload.unbind("change").bind("change", function(evt) {
+            console.log("=== refImageUpload CHANGE fired, file:", evt.target.files[0]);
+            var file = evt.target.files[0];
+            if (file) {
+                OA.RefImage.loadImage(file, oaControl.cardW, oaControl.cardH);
+                oaControl.refImageShow = true;
+            }
+            $refImageUpload[0].value = "";
+        });
 
         $previewUIwrapper.css("visibility", "visible");
 

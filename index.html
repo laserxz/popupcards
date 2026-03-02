@@ -81,11 +81,14 @@
 
 <div id="bottomBar">
   <a id="tipBtn"><i class="fa fa-question-circle"></i></a>
+  <a class="helpLink" href="javascript:;" id="quickGuideBtn"><i class="fa fa-rocket"></i> Quick Guide</a>
+  <a class="helpLink" href="https://www.youtube.com/watch?v=TKUqK5zyhHU" target="_blank"><i class="fa fa-youtube-play"></i> Tutorial</a>
   <span id="creditLine">Based on <a href="https://github.com/caa1211/webOAcard" target="_blank">webOAcard</a> by caa1211</span>
 </div>
 
 <a id="modeText" href="javascript:void(0);">  </a>
 <input type="file" id="fileUpload" style="display:none;" />
+<input type="file" id="refImageUpload" accept="image/*" style="display:none;" />
 
     <script src="js/three.min.js"></script>
     <script src="js/stats.min.js"></script>
@@ -114,12 +117,20 @@
         "js\/oa.point.js",
         "js\/oa.contourRepo.js",
         "js\/oa.svgExport.js",
+        "js\/oa.refImage.js",
         "js\/webOAcard.js",
         "js\/demo.js"
     ];
     for(var i=0; i<scriptList.length; i++){
      document.write('<script src="'+ scriptList[i] +'"?v='+new Date().getMilliseconds()+'><\/script>');
     }
+    </script>
+
+    <script>
+    // Quick Guide opens the preview GIF in a new tab
+    document.getElementById('quickGuideBtn').addEventListener('click', function() {
+        window.open('preview.gif', '_blank');
+    });
     </script>
 
 </body>

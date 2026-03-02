@@ -5,6 +5,37 @@ body {
     overflow: hidden;
 }
 
+#bottomBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+#bottomBar a.helpLink {
+    color: #4fc3f7;
+    text-decoration: none;
+    margin-right: 16px;
+}
+
+#bottomBar a.helpLink:hover {
+    color: #fff;
+}
+
+#bottomBar #creditLine {
+    color: #aaa;
+    float: right;
+}
+
+#bottomBar #creditLine a {
+    color: #ccc;
+}
+
 @font-face {
     font-family: Quicksand;
     src: url(../fonts/quicksand/Quicksand-Light.otf);
