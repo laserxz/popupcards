@@ -514,6 +514,9 @@ window.onload = function() {
                 $downloadLink[0].click();
             });
         },
+        downloadSVG: function() {
+            OA.SvgExport.exportSVG(oaModel);
+        },
         subLevel: oaModel.getSubLevel(),
         xLimit: 1,
         subLevelChange: function(value) {
@@ -668,6 +671,7 @@ window.onload = function() {
         buildRecentList(fileGUI, isReloadModel);
         fileGUI.add(oaControl, 'saveModel').name('<i class="fa fa-floppy-o"></i> Save ' +
             '<i id="savedHint" class="fa fa-circle" title="need save"></i>');
+        fileGUI.add(oaControl, 'downloadSVG').name('<i class="fa fa-scissors"></i> SVG Template');
 
         $savedHint = $(fileGUI.domElement).find("#savedHint");
     }
